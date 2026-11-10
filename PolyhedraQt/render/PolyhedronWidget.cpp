@@ -13,7 +13,7 @@ struct DrawFace {
     double depth = 0.0;
     QColor color;
 };
-} // namespace
+}
 
 PolyhedronWidget::PolyhedronWidget(QWidget* parent) : QWidget(parent)
 {
@@ -43,9 +43,6 @@ void PolyhedronWidget::paintEvent(QPaintEvent*)
     if (polyhedron.vertices.isEmpty())
         return;
 
-    // Use the same scale in screen pixels for X and Y. The fit-to-bounds step below
-    // adapts the scene to the available widget size without stretching the model.
-
     double radius = 1.0;
     const Point3D modelCenter = polyhedron.center();
     for (const Point3D& v : polyhedron.vertices) {
@@ -61,7 +58,6 @@ void PolyhedronWidget::paintEvent(QPaintEvent*)
     for (const Point3D& v : polyhedron.vertices)
         projectedVertices.append(Projection::projectPoint(projectionType, v));
 
-    // Draw full coordinate axes through the origin, with positive directions labeled.
     const Point3D origin(0.0, 0.0, 0.0);
     const Point3D axisEnds[3] = {
         Point3D(axisLength, 0.0, 0.0),
@@ -108,8 +104,7 @@ void PolyhedronWidget::paintEvent(QPaintEvent*)
     const QPointF projectedCenter((minX + maxX) * 0.5, (minY + maxY) * 0.5);
 
     auto toScreen = [&](const ProjectedPoint& p) -> QPointF {
-        return QPointF(center.x() + (p.x - projectedCenter.x()) * scale,
-                       center.y() - (p.y - projectedCenter.y()) * scale);
+        return QPointF(center.x() + (p.x - projectedCenter.x()) * scale, center.y() - (p.y - projectedCenter.y()) * scale);
     };
 
     QVector<QPointF> screenVertices;

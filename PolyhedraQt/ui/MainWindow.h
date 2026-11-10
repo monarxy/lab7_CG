@@ -1,4 +1,5 @@
-#pragma once
+#ifndef MAIN_WINDOW_H
+#define MAIN_WINDOW_H
 
 #include <QMainWindow>
 
@@ -54,3 +55,5 @@ private:
     void buildRevolution();
     void buildSurface();
 };
+
+#endif

@@ -60,4 +60,4 @@ Matrix4 rotateAroundLine(const Point3D& a, const Point3D& b, double angle)
            * Matrix4::translation(-a.x, -a.y, -a.z);
 }
 
-} // namespace Transformations
+}

@@ -22,10 +22,7 @@ namespace {
 
 constexpr double kPi = 3.14159265358979323846;
 
-QDoubleSpinBox* numberBox(double value = 0.0,
-                          double minimum = -1000.0,
-                          double maximum = 1000.0,
-                          int decimals = 2)
+QDoubleSpinBox* numberBox(double value = 0.0, double minimum = -1000.0, double maximum = 1000.0, int decimals = 2)
 {
     auto* spinBox = new QDoubleSpinBox;
     spinBox->setRange(minimum, maximum);
@@ -42,12 +39,8 @@ QPushButton* actionButton(const QString& text)
     return button;
 }
 
-} // namespace
-
-MainWindow::MainWindow(QWidget* parent)
-    : QMainWindow(parent),
-      view(new PolyhedronWidget),
-      current(PolyhedronFactory::create(PolyhedronFactory::Hexahedron))
+}
+MainWindow::MainWindow(QWidget* parent): QMainWindow(parent), view(new PolyhedronWidget), current(PolyhedronFactory::create(PolyhedronFactory::Hexahedron))
 {
     setWindowTitle("Правильные многогранники — 3D преобразования");
     resize(1200, 760);
@@ -66,7 +59,6 @@ MainWindow::MainWindow(QWidget* parent)
     auto* controls = new QWidget;
     auto* controlsLayout = new QVBoxLayout(controls);
 
-    // Model selection and reset.
     shapeBox = new QComboBox;
     for (int i = 0; i < 5; ++i) {
         shapeBox->addItem(PolyhedronFactory::name(
@@ -81,7 +73,6 @@ MainWindow::MainWindow(QWidget* parent)
     shapeLayout->addRow(resetButton);
     controlsLayout->addWidget(shapeGroup);
 
-    // Projection selection.
     projectionBox = new QComboBox;
     projectionBox->addItems({"Аксонометрическая", "Перспективная"});
 
@@ -90,7 +81,6 @@ MainWindow::MainWindow(QWidget* parent)
     projectionLayout->addRow("Тип:", projectionBox);
     controlsLayout->addWidget(projectionGroup);
 
-    // Parameters used by transformations.
     xBox = numberBox();
     yBox = numberBox();
     zBox = numberBox();
@@ -121,7 +111,6 @@ MainWindow::MainWindow(QWidget* parent)
     auto* scaleButton = actionButton("Масштаб относительно центра");
     controlsLayout->addWidget(scaleButton);
 
-    // Reflection across a coordinate plane.
     planeBox = new QComboBox;
     planeBox->addItems({"XY", "XZ", "YZ"});
     auto* reflectButton = actionButton("Отразить относительно плоскости");
@@ -132,7 +121,6 @@ MainWindow::MainWindow(QWidget* parent)
     reflectionLayout->addWidget(reflectButton);
     controlsLayout->addWidget(reflectionGroup);
 
-    // Rotation around an axis through the polyhedron center.
     axisBox = new QComboBox;
     axisBox->addItems({"X", "Y", "Z"});
     auto* centerRotateButton = actionButton("Вращать вокруг центральной оси");
@@ -143,7 +131,6 @@ MainWindow::MainWindow(QWidget* parent)
     axisLayout->addWidget(centerRotateButton);
     controlsLayout->addWidget(axisGroup);
 
-    // Rotation around an arbitrary line through points A and B.
     axBox = numberBox(-1.0);
     ayBox = numberBox();
     azBox = numberBox();
@@ -173,7 +160,7 @@ MainWindow::MainWindow(QWidget* parent)
     auto* arbitraryRotateButton = actionButton("Повернуть вокруг прямой");
     lineLayout->addRow(arbitraryRotateButton);
     controlsLayout->addWidget(lineGroup);
-    // OBJ import/export for the current model.
+
     auto* fileGroup = new QGroupBox("Файл OBJ");
     auto* fileLayout = new QHBoxLayout(fileGroup);
     auto* openButton = actionButton("Открыть OBJ");
@@ -182,7 +169,6 @@ MainWindow::MainWindow(QWidget* parent)
     fileLayout->addWidget(saveButton);
     controlsLayout->addWidget(fileGroup);
 
-    // Surface of revolution settings. Each line contains x, y, z of one profile point.
     auto* revolutionGroup = new QGroupBox("Фигура вращения");
     auto* revolutionLayout = new QFormLayout(revolutionGroup);
     profileEdit = new QPlainTextEdit;
@@ -202,7 +188,6 @@ MainWindow::MainWindow(QWidget* parent)
     revolutionLayout->addRow(buildRevolutionButton);
     controlsLayout->addWidget(revolutionGroup);
 
-    // Function surface settings; same interval and number of divisions for X and Y.
     auto* surfaceGroup = new QGroupBox("График двух переменных z = f(x, y)");
     auto* surfaceLayout = new QFormLayout(surfaceGroup);
     functionBox = new QComboBox;
@@ -367,9 +352,7 @@ void MainWindow::buildRevolution()
     }
     Polyhedron generated;
     QString error;
-    if (!ModelGenerators::revolution(profile, revolutionAxisBox->currentIndex(),
-                                      static_cast<int>(revolutionSegmentsBox->value()),
-                                      generated, &error)) {
+    if (!ModelGenerators::revolution(profile, revolutionAxisBox->currentIndex(), static_cast<int>(revolutionSegmentsBox->value()), generated, &error)) {
         QMessageBox::warning(this, "Построение фигуры вращения", error);
         return;
     }
@@ -382,10 +365,7 @@ void MainWindow::buildSurface()
 {
     Polyhedron generated;
     QString error;
-    if (!ModelGenerators::surface(functionBox->currentIndex(), surfaceMinBox->value(),
-                                  surfaceMaxBox->value(),
-                                  static_cast<int>(surfaceDivisionsBox->value()),
-                                  generated, &error)) {
+    if (!ModelGenerators::surface(functionBox->currentIndex(), surfaceMinBox->value(), surfaceMaxBox->value(), static_cast<int>(surfaceDivisionsBox->value()), generated, &error)) {
         QMessageBox::warning(this, "Построение поверхности", error);
         return;
     }
