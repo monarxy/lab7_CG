@@ -143,8 +143,6 @@ void PolyhedronWidget::paintEvent(QPaintEvent*)
         return a.depth > b.depth;
     });
 
-    // Coordinate axes are drawn behind the model, so they remain visible without
-    // obscuring the fixed face colors.
     const ProjectedPoint projectedOrigin = Projection::projectPoint(projectionType, origin);
     for (int i = 0; i < 3; ++i) {
         const ProjectedPoint start = Projection::projectPoint(projectionType, axisStarts[i]);
