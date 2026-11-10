@@ -1,4 +1,5 @@
-#pragma once
+#ifndef OBJO_H
+#define OBJO_H
 #include "Polyhedron.h"
 #include <QString>
 

@@ -7,8 +7,7 @@
 namespace {
 Point3D rotateForView(const Point3D& point)
 {
-    const Matrix4 rotation = Matrix4::rotationX(0.6154797087)
-                             * Matrix4::rotationY(0.7853981634);
+    const Matrix4 rotation = Matrix4::rotationX(0.6154797087) * Matrix4::rotationY(0.7853981634);
     return rotation.transformPoint(point);
 }
 }
@@ -33,9 +32,8 @@ ProjectedPoint projectPoint(ProjectionType type, const Point3D& point)
         result.depth = z;
     }
 
-    result.valid = std::isfinite(result.x) && std::isfinite(result.y)
-                   && std::isfinite(result.depth);
+    result.valid = std::isfinite(result.x) && std::isfinite(result.y) && std::isfinite(result.depth);
     return result;
 }
 
-} // namespace Projection
+}
